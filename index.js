@@ -90,8 +90,12 @@ async function run() {
     }
 }
 run().catch(console.dir)
+
 app.get('/', (req, res) => {
     res.send('Wasys car services running')
+})
+app.get('/wasy', (req, res) => {
+    res.send('wasy is doing good')
 })
 app.listen(port, () => {
     console.log('working in wasys car services', port)
