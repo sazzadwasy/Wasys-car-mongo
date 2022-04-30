@@ -1,5 +1,6 @@
 const express = require("express")
 const cors = require("cors")
+const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion, MongoRuntimeError, ObjectId } = require('mongodb');
 require('dotenv').config()
 
@@ -16,6 +17,18 @@ async function run() {
     try {
         await client.connect()
         const serviceCollection = client.db('wasysCar').collection('service')
+        const orderCollection = client.db('wasysCar').collection('order')
+
+        //auth
+        // app.get('/login', async (req, res) => {
+        //     const user = req.body;
+        //     const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+        //         expiresIn: '1d'
+        //     });
+        //     res.send({ accessToken })
+        // })
+
+
         //port user
         app.post('/service', async (req, res) => {
             const newService = req.body
@@ -39,14 +52,37 @@ async function run() {
                 res.send(service)
             })
             //delete post
-            app.delete('service/:id', async (req, res) => {
+            app.delete('/service/:id', async (req, res) => {
                 const id = req.params.id
                 const query = { _id: ObjectId(id) }
                 const result = await serviceCollection.deleteOne(query)
-                console.log(result)
+                console.log(id)
                 res.send(result)
             })
+            // order collection api
+            app.get('/order', async (req, res) => {
+                const email = req.query.email
+                const query = { email: email }
+                const cursor = orderCollection.find(query)
+                const orders = await cursor.toArray()
+                res.send(orders)
+            })
+            // app.get('/order', async (req, res) => {
+            //     const email = req.query
+            //     // console.log(email)
+            //     const query = {}
+            //     const cursor = orderCollection.find(query)
+            //     // console.log(cursor)
+            //     const orders = await cursor.toArray()
 
+            //     res.send(orders)
+            // })
+            app.post('/order', async (req, res) => {
+                const order = req.body
+                const result = await orderCollection.insertOne(order)
+                res.send(result)
+
+            })
         })
     }
     finally {
@@ -58,5 +94,5 @@ app.get('/', (req, res) => {
     res.send('Wasys car services running')
 })
 app.listen(port, () => {
-    console.log('working in wasys car services')
+    console.log('working in wasys car services', port)
 })
