@@ -9,8 +9,24 @@ once for computer
  --------------------
  once for each project
  ---------------------
- 1.create heroku project
+ 1.heroku create
+ 2.git add . git commit . git push 
+ 3.git push heroku main
+ 4.goto heroku dashBoard > current project > settings > revel config
+ 5.copy pase config vars from .env file
+ 6.make sure you have you have whitelisted all ip ADDREASS to access mongodb
 
+------------------------
+update server
+----------------------
+1.make changes
+2.git add . git commit . git push 
+3.git push heroku main
+
+ -------------------------
+connect server with client
+--------------------------
+1.
 
 
  */

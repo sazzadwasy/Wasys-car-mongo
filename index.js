@@ -28,7 +28,13 @@ async function run() {
         //     res.send({ accessToken })
         // })
 
-
+        app.get('/order', async (req, res) => {
+            const email = req.query.email
+            const query = { email: email }
+            const cursor = orderCollection.find(query)
+            const orders = await cursor.toArray()
+            res.send(orders)
+        })
         //port user
         app.post('/service', async (req, res) => {
             const newService = req.body
@@ -60,13 +66,7 @@ async function run() {
                 res.send(result)
             })
             // order collection api
-            app.get('/order', async (req, res) => {
-                const email = req.query.email
-                const query = { email: email }
-                const cursor = orderCollection.find(query)
-                const orders = await cursor.toArray()
-                res.send(orders)
-            })
+
             // app.get('/order', async (req, res) => {
             //     const email = req.query
             //     // console.log(email)
@@ -86,7 +86,7 @@ async function run() {
         })
     }
     finally {
-
+        console.log('connected to db')
     }
 }
 run().catch(console.dir)
